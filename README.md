@@ -1,2 +1,44 @@
 # Calculator_PyQt5
-This is a professional calculator written with the PyQt5 library in python
+
+## **Table of Contents:**
+- [About the Program](#about-the-program)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Preview](#preview)
+  - [Built with](#built-with)
+  - [Credits](#credits)
+  - [Versions](#versions)
+- [Reach Me](#reach-me)
+- [See Also](#see-also)
+
+## **About the Program:**
+This is a professional calculator written with the PyQt5 in python
+
+### **Features:**
+- All buttons have a shortcut
+- Support pow, sqrt, round, backspace & parentheses
+
+### Requirements:
+- pyqt5 `pip install pyqt5`
+
+### **Preview:** 
+![preview](/Files/preview.png)
+
+### **Built with:**
+- [python3](https://www.python.org)
+- [PyQt5](https://pypi.org/project/PyQt5/)
+
+### **Credits:**
+- Icon made by [icons8](https://icons8.com/)
+
+### **Versions:**
+- v1.0
+
+## **Reach Me:**
+- [sina_programer](https://t.me/sina_programer) in telegram
+- [sina.programer](https://www.instagram.com/sina.programer) in instagram
+
+## **See Also:**
+- [Calculator Tk](https://github.com/sina-programer/Calculator_Tk)
+- [File Cryptographer](https://github.com/sina-programer/File_Cryptographer)
+- [Audio Extractor](https://github.com/sina-programer/Audio_Extractor)
