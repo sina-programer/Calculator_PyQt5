@@ -5,7 +5,6 @@
   - [Features](#features)
   - [Requirements](#requirements)
   - [Preview](#preview)
-  - [Built with](#built-with)
   - [Credits](#credits)
 - [Reach Me](#reach-me)
 - [See Also](#see-also)
@@ -15,6 +14,7 @@ This is a professional calculator written with the PyQt5 in python
 
 ### **Features:**
 - All buttons have a shortcut
+- Show the last activity in the history
 - Support pow, sqrt, round, backspace & parentheses
 
 ### Requirements:
@@ -22,10 +22,6 @@ This is a professional calculator written with the PyQt5 in python
 
 ### **Preview:** 
 ![preview](/Files/preview.png)
-
-### **Built with:**
-- [python3](https://www.python.org)
-- [PyQt5](https://pypi.org/project/PyQt5/)
 
 ### **Credits:**
 - Icon made by [icons8](https://icons8.com/)
