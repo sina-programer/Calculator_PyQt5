@@ -15,7 +15,7 @@ This is a professional calculator written with the PyQt5 in python
 ### **Features:**
 - All buttons have a shortcut
 - Show the last activity in the history
-- Support pow, sqrt, round, backspace & parentheses
+- Support pow, sqrt, round, backspace, parentheses, abs, pi, ...
 
 ### Requirements:
 - pyqt5 `pip install pyqt5`
