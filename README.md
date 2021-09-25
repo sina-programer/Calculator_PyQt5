@@ -7,7 +7,6 @@
   - [Preview](#preview)
   - [Built with](#built-with)
   - [Credits](#credits)
-  - [Versions](#versions)
 - [Reach Me](#reach-me)
 - [See Also](#see-also)
 
@@ -30,9 +29,6 @@ This is a professional calculator written with the PyQt5 in python
 
 ### **Credits:**
 - Icon made by [icons8](https://icons8.com/)
-
-### **Versions:**
-- v1.0
 
 ## **Reach Me:**
 - [sina_programer](https://t.me/sina_programer) in telegram
