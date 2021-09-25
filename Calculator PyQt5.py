@@ -47,22 +47,18 @@ class AboutDialog(QtWidgets.QDialog):
 class Widget(QtWidgets.QMainWindow):
     def __init__(self):
         super(Widget, self).__init__()
+        self.error_txt = 'ERROR: '
         self.about_dialog = AboutDialog()
         self.characters = {
             'x': '*', '÷': '/', '^': '**', '²√': 'sqrt', 'π': 'pi'
             }
         
-        if os.path.exists(r'Files\icon.ico'):
-            self.setupUi()
-
-        else:
-              QtWidgets.QMessageBox.critical(self, 'ERROR', '\nPlease run the app in the default folder!\t\n')
-        
+        self.setupUi()
         self.show()
 
     def setupUi(self):
         window_icon = QtGui.QIcon()
-        window_icon.addPixmap(QtGui.QPixmap(r"Files\icon.ico"))
+        window_icon.addPixmap(QtGui.QPixmap(r'Files\icon.ico'))
 
         self.setGeometry(500, 250, 310, 400)
         self.setFixedSize(310, 400)
@@ -215,11 +211,15 @@ class Widget(QtWidgets.QMainWindow):
         btn_reverse.clicked.connect(self.reverse)
         btn_reverse.setShortcut('a')
 
+        backspace_icon_path = r'Files\backspace.png'
         backspace_icon = QtGui.QIcon()
-        backspace_icon.addPixmap(QtGui.QPixmap(r"Files\backspace.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        backspace_icon.addPixmap(QtGui.QPixmap(backspace_icon_path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         btn_backspace = QtWidgets.QPushButton(buttons_frame)
         btn_backspace.setGeometry(QtCore.QRect(210, 0, 60, 30))
-        btn_backspace.setIcon(backspace_icon)
+        if os.path.exists(backspace_icon_path):
+            btn_backspace.setIcon(backspace_icon)
+        else:
+            btn_backspace.setText('←')
         btn_backspace.clicked.connect(self.backspace)
         btn_backspace.setShortcut('backspace')
         
@@ -272,21 +272,20 @@ class Widget(QtWidgets.QMainWindow):
         self.init_menu()
         
     def calculate(self):
-        error_txt = 'ERROR: '
         try:
-            self.result = self.result.lstrip(error_txt)
+            self.result = self.result.lstrip(self.error_txt)
             history = self.result
             
-            for key in self.characters.keys():
-                self.result = self.result.replace(key, self.characters.get(key))
+            for key, item in self.characters.items():
+                self.result = self.result.replace(key, value)
             
             self.result = str(eval(self.result))
             self.history_lbl.setText(history)
             self.monitor.setText(self.result)
         
         except:
-            if not self.result.startswith(error_txt):
-                self.result = error_txt + history
+            if not self.result.startswith(self.error_txt):
+                self.result = self.error_txt + history
                 self.monitor.setText(self.result)
         
     def update_monitor(self, text):
@@ -307,6 +306,16 @@ class Widget(QtWidgets.QMainWindow):
         if self.result:
             self.result = self.result[:-1]
             self.monitor.setText(self.result)
+            
+        if self.result.startswith(self.error_txt):
+            try:
+                result = self.result.lstrip(self.error_txt)
+                eval(result)
+                self.result = result
+                self.monitor.setText(self.result)
+            
+            except:
+                pass
             
     def reverse(self):
         if self.result:
