@@ -310,8 +310,12 @@ class Widget(QtWidgets.QMainWindow):
         if self.result.startswith(self.error_txt):
             try:
                 result = self.result.lstrip(self.error_txt)
+                final = result
+                for key, value in self.characters.items():
+                    result = result.replace(key, value)
+                    
                 eval(result)
-                self.result = result
+                self.result = final
                 self.monitor.setText(self.result)
             
             except:
