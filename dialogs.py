@@ -1,9 +1,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import webbrowser
+import sys
 
 
 class AboutDialog(QtWidgets.QDialog):
     def __init__(self):
         super(AboutDialog, self).__init__()
+        if sys.platform == 'win32':
+            import winsound
+            winsound.MessageBeep()
+
         self.setupUi()
 
     def setupUi(self):
@@ -39,4 +45,3 @@ class AboutDialog(QtWidgets.QDialog):
         horizontalLayout.addWidget(btn_github)
         horizontalLayout.addWidget(btn_instagram)
         horizontalLayout.addWidget(btn_telegram)
-
