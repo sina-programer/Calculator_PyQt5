@@ -1,9 +1,34 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from math import sqrt, pi
+from functools import wraps
+from math import pi
 import sys
 import os
 
 import dialogs
+
+
+def my_eval(phrase):
+    return eval(phrase.translate(trans_chars))
+
+
+def my_sqrt(p, number):
+    return eval(str(number)) ** (1 / p)
+
+
+def operator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        self = args[0]
+        if result := self.result:
+            try:
+                self.result = func(self, **kwargs)
+                self.monitor.setText(self.result)
+
+            except:
+                if not result.startswith(self.error_txt):
+                    self.show_error(result)
+
+    return wrapper
 
 
 class Widget(QtWidgets.QMainWindow):
@@ -11,9 +36,6 @@ class Widget(QtWidgets.QMainWindow):
         super(Widget, self).__init__()
         self.result = ''
         self.error_txt = 'ERROR: '
-        self.characters = {
-            '×': '*', '÷': '/', '^': '**', '²√': 'sqrt', 'π': 'pi'
-        }
 
         self.setupUi()
         self.show()
@@ -130,7 +152,7 @@ class Widget(QtWidgets.QMainWindow):
         btn_root = QtWidgets.QPushButton(buttons_frame)
         btn_root.setGeometry(210, 40, 60, 30)
         btn_root.setText("²√")
-        btn_root.clicked.connect(lambda: self.update_monitor('²√('))
+        btn_root.clicked.connect(lambda: self.update_monitor('√(2, '))
 
         btn_square = QtWidgets.QPushButton(buttons_frame)
         btn_square.setGeometry(140, 40, 60, 30)
@@ -230,36 +252,9 @@ class Widget(QtWidgets.QMainWindow):
 
         self.init_menu()
 
-    def calculate(self):
-        try:
-            self.result = self.result.lstrip(self.error_txt)
-            history = self.result
-
-            for key, value in self.characters.items():
-                self.result = self.result.replace(key, value)
-
-            self.result = str(eval(self.result))
-            self.monitor.setText(self.result)
-            self.history_lbl.setText(history)
-
-        except:
-            if not self.result.startswith(self.error_txt):
-                self.result = self.error_txt + history
-                self.monitor.setText(self.result)
-
     def update_monitor(self, text):
         self.result += text
         self.monitor.setText(self.result)
-
-    def fabs(self):
-        if self.result:
-            self.result = str(abs(eval(self.result)))
-            self.monitor.setText(self.result)
-
-    def negative(self):
-        if self.result:
-            self.result = str(-eval(self.result))
-            self.monitor.setText(self.result)
 
     def backspace(self):
         if self.result:
@@ -269,31 +264,53 @@ class Widget(QtWidgets.QMainWindow):
         if self.result.startswith(self.error_txt):
             try:
                 result = self.result.lstrip(self.error_txt)
-                final = result
-                for key, value in self.characters.items():
-                    result = result.replace(key, value)
-
-                eval(result)
-                self.result = final
+                my_eval(result)
+                self.result = result
                 self.monitor.setText(self.result)
 
             except:
                 pass
 
-    def reverse(self):
+    def calculate(self):
         if self.result:
-            self.result = str(1 / eval(self.result))
-            self.monitor.setText(self.result)
+            try:
+                self.result = self.result.lstrip(self.error_txt)
+                history = self.result
+                self.result = str(my_eval(self.result))
 
+                if self.result != history:
+                    self.monitor.setText(self.result)
+                    self.history_lbl.setText(history)
+
+            except:
+                if not self.result.startswith(self.error_txt):
+                    self.show_error(history)
+
+    @operator
+    def fabs(self):
+        return str(abs(my_eval(self.result.lstrip(self.error_txt))))
+
+    @operator
+    def negative(self):
+        return str(-my_eval(self.result.lstrip(self.error_txt)))
+
+    @operator
+    def reverse(self):
+        return str(1 / my_eval(self.result.lstrip(self.error_txt)))
+
+    @operator
     def round_number(self):
-        if self.result:
-            self.result = str(round(eval(self.result)))
-            self.monitor.setText(self.result)
+        return str(round(my_eval(self.result.lstrip(self.error_txt))))
 
     def clear_monitor(self):
         self.result = ''
         self.monitor.clear()
         self.history_lbl.setText('')
+
+    def show_error(self, phrase):
+        if not phrase.startswith(self.error_txt):
+            self.result = self.error_txt + phrase
+            self.monitor.setText(self.result)
 
     def init_menu(self):
         aboutAction = QtWidgets.QAction('About us', self)
@@ -301,6 +318,12 @@ class Widget(QtWidgets.QMainWindow):
 
         menu = self.menuBar()
         menu.addAction(aboutAction)
+
+
+replace_characters = {
+    '×': '*', '÷': '/', '^': '**', '√': 'my_sqrt', 'π': 'pi'
+}
+trans_chars = str.maketrans(replace_characters)
 
 
 if __name__ == "__main__":
